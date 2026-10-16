@@ -473,7 +473,7 @@ class Cluster:
         while time.time() < end:
             st = self.api.nodes(node).tasks(upid).status.get()
             if st["status"] == "stopped":
-                if st.get("exitstatus") != "OK":
+                if not str(st.get("exitstatus")).startswith(("OK", "WARNINGS")):
                     raise RuntimeError(f"Proxmox task failed: {st.get('exitstatus')}")
                 return
             time.sleep(delay)
